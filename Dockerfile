@@ -6,7 +6,7 @@ COPY Cargo.toml Cargo.lock ./
 COPY src ./src
 RUN cargo build --locked --release
 
-FROM alpine:3.22
+FROM alpine:3.24.1
 
 RUN apk add --no-cache ca-certificates openssh-client-default \
     && addgroup -S shellcd \

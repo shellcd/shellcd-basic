@@ -33,9 +33,11 @@ pub struct RunArgs {
     #[arg(long, env = "SHELLCD_SCRIPT_ARG")]
     pub script_arg: Option<String>,
 
+    /// SSH private-key path. In GitLab, use a protected file-type CI/CD variable.
     #[arg(long, env = "SHELLCD_PRIVATE_KEY_FILE")]
     pub private_key_file: PathBuf,
 
+    /// Trusted known_hosts path. In GitLab, use a protected file-type CI/CD variable.
     #[arg(long, env = "SHELLCD_KNOWN_HOSTS_FILE")]
     pub known_hosts_file: PathBuf,
 

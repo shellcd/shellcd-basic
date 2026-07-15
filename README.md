@@ -21,16 +21,36 @@ remote server must restrict that key and enforce the final command authorization
 
 ## Quick GitLab example
 
+Create these protected, file-type CI/CD variables in GitLab:
+
+- `SHELLCD_PRIVATE_KEY_FILE`: the deployment user's SSH private key;
+- `SHELLCD_KNOWN_HOSTS_FILE`: the trusted SSH host-key entry.
+
+GitLab writes each value to a temporary file and exposes its path through the variable. The
+variable names therefore map directly to the file-path settings expected by `shellcd-basic`; do
+not store the private key in a regular environment variable.
+
 ```yaml
 deploy:
   image:
     name: kimc1992/shellcd-basic:latest
     entrypoint: [""]
+
+  variables:
+    SHELLCD_HOST: "deploy.example.com"
+    SHELLCD_SSH_USER: "deploy"
+    SHELLCD_SCRIPT: "/opt/shellcd/scripts/deploy-api.sh"
+
+  before_script:
+    - chmod 600 "$SHELLCD_PRIVATE_KEY_FILE"
+
   script:
     - shellcd-basic run
 ```
 
-Pin a reviewed version tag or image digest for production.
+`GITLAB_USER_EMAIL` and the other supported GitLab metadata variables are read automatically. Pin
+a reviewed version tag or image digest for production. Provision `known_hosts` from a trusted
+source; do not discover the host key with unauthenticated `ssh-keyscan` in the deployment job.
 
 ## Documentation
 

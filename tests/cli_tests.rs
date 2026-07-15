@@ -47,6 +47,8 @@ impl Fixture {
         command
             .env("PATH", &self.ssh_dir)
             .env("FAKE_SSH_ARGS", &self.arguments)
+            .env("SHELLCD_PRIVATE_KEY_FILE", &self.key)
+            .env("SHELLCD_KNOWN_HOSTS_FILE", &self.known_hosts)
             .args([
                 "run",
                 "--host",
@@ -55,12 +57,6 @@ impl Fixture {
                 "deploy",
                 "--script",
                 "/opt/shellcd/scripts/deploy-api.sh",
-                "--private-key-file",
-            ])
-            .arg(&self.key)
-            .arg("--known-hosts-file")
-            .arg(&self.known_hosts)
-            .args([
                 "--caller-email",
                 "developer@example.com",
                 "--project-path",

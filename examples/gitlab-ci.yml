@@ -13,13 +13,10 @@ deploy:
     # SHELLCD_DORARION: "1"
 
   before_script:
-    - chmod 600 "$SHELLCD_SSH_PRIVATE_KEY"
+    - chmod 600 "$SHELLCD_PRIVATE_KEY_FILE"
 
   script:
-    - >-
-      shellcd-basic run
-      --private-key-file "$SHELLCD_SSH_PRIVATE_KEY"
-      --known-hosts-file "$SHELLCD_KNOWN_HOSTS"
+    - shellcd-basic run
 
   environment:
     name: production
@@ -28,7 +25,7 @@ deploy:
     - if: '$CI_COMMIT_BRANCH == "main"'
       when: manual
 
-# Configure SHELLCD_SSH_PRIVATE_KEY and SHELLCD_KNOWN_HOSTS as protected file-type
-# CI variables. Mask/hide a value only when GitLab accepts its format. Provision known_hosts from a trusted source;
-# do not discover the host key with unauthenticated ssh-keyscan in this job.
+# Configure SHELLCD_PRIVATE_KEY_FILE and SHELLCD_KNOWN_HOSTS_FILE as protected file-type CI
+# variables. Mask/hide a value only when GitLab accepts its format. Provision known_hosts from a
+# trusted source; do not discover the host key with unauthenticated ssh-keyscan in this job.
 # Pin a reviewed version tag or image digest instead of latest in production.
