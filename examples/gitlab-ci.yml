@@ -1,0 +1,34 @@
+deploy:
+  stage: deploy
+  image:
+    name: kimc1992/shellcd-basic:latest
+    entrypoint: [""]
+
+  variables:
+    SHELLCD_HOST: "192.168.10.20"
+    SHELLCD_SSH_USER: "deploy"
+    SHELLCD_SCRIPT: "/opt/shellcd/scripts/deploy-api.sh"
+    # Optional:
+    # SHELLCD_SCRIPT_ARG: "release-candidate"
+    # SHELLCD_DORARION: "1"
+
+  before_script:
+    - chmod 600 "$SHELLCD_SSH_PRIVATE_KEY"
+
+  script:
+    - >-
+      shellcd-basic run
+      --private-key-file "$SHELLCD_SSH_PRIVATE_KEY"
+      --known-hosts-file "$SHELLCD_KNOWN_HOSTS"
+
+  environment:
+    name: production
+
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: manual
+
+# Configure SHELLCD_SSH_PRIVATE_KEY and SHELLCD_KNOWN_HOSTS as protected file-type
+# CI variables. Mask/hide a value only when GitLab accepts its format. Provision known_hosts from a trusted source;
+# do not discover the host key with unauthenticated ssh-keyscan in this job.
+# Pin a reviewed version tag or image digest instead of latest in production.

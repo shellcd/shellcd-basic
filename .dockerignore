@@ -1,0 +1,10 @@
+target
+.git
+.github
+.env
+.env.*
+secrets
+*.log
+assets
+tests
+examples
