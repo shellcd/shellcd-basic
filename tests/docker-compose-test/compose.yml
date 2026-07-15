@@ -1,0 +1,5 @@
+services:
+  app:
+    container_name: shellcd-compose-test-app
+    image: alpine:${IMAGE_TAG}
+    command: ["sh", "-c", "echo running alpine:${IMAGE_TAG}; sleep infinity"]

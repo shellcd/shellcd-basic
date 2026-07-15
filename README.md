@@ -81,4 +81,21 @@ cargo test --all-targets
 cargo build --release
 ```
 
+The container integration tests use a temporary Alpine SSH server and short-lived OpenSSH user
+certificate:
+
+```bash
+sudo ./tests/simple-test/index.sh kimc1992/shellcd-basic:0.0.2
+sudo ./tests/docker-compose-test/index.sh kimc1992/shellcd-basic:0.0.2 3.21
+sudo ./tests/artifact-extract-test/index.sh kimc1992/shellcd-basic:0.0.2 nginx:1.27-alpine
+sudo ./tests/artifact-extract-nginx-hup-test/index.sh kimc1992/shellcd-basic:0.0.2 nginx:1.27-alpine
+```
+
+The tests cover a simple command, a real `docker compose up -d` tag update, extraction of
+`/usr/share/nginx/html` from an image, and artifact extraction followed by an nginx `SIGHUP`.
+Tests that exercise Docker deployment temporarily give the isolated SSH test account access to the
+host Docker socket; this is test-only because Docker socket access is equivalent to host root
+access. Every test removes its temporary containers, networks, volumes, images, keys, and
+certificates when it exits.
+
 Apache-2.0 licensed. See [LICENSE](LICENSE).
